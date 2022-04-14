@@ -1,0 +1,84 @@
+movies = P2_Movie_Ratings
+library(ggplot2)
+
+#-----------------------------------------------------------Exploratory Analysis 
+head(movies)
+colnames(movies)
+colnames(movies) = c("Film","Genre","CriticRating","AudienceRating","BudgetMillions","Year")
+colnames(movies)
+str(movies)
+movies$Film = as.factor(movies$Film)
+movies$Genre = as.factor(movies$Genre)
+movies$Year = as.factor(movies$Year)
+str(movies)
+summary(movies)
+
+#--------------------------------------------------------------------Basic ggplot
+#Aesthetics 1: axes
+ggplot(data = movies, aes(x = CriticRating, y = AudienceRating)) 
+
+#Geometry:adds plot points 
+ggplot(data = movies, aes(x = CriticRating, y = AudienceRating)) +
+  geom_point()
+
+#Aesthetics 2: Add Color
+ggplot(data = movies, aes(x = CriticRating, y = AudienceRating, color = Genre)) +
+  geom_point()
+
+#Aesthetics 3: Change Size of Plot Points
+ggplot(data = movies, aes(x = CriticRating, y = AudienceRating, 
+                          color = Genre, size = BudgetMillions)) +
+  geom_point()
+
+#-----------------------------------------------------------Plotting with Layers
+#Using ggplot, the plot is an object
+#thus, for each graphical layer, a + sign is required
+#geometry is a layer  
+
+#Create blank plot with axes as object p 
+p = ggplot(data = movies, aes(x = CriticRating, y = AudienceRating, 
+                              color = Genre, size = BudgetMillions)) 
+p # p is now the above portion of the plot
+#type ""+ geom_point" to add plot points to the plot p
+p = p+ geom_point()
+p
+
+#plot lines instead of points
+p = ggplot(data = movies, aes(x = CriticRating, y = AudienceRating, 
+                              color = Genre, size = BudgetMillions))
+p = p + geom_line()
+p
+
+#plot lines and points
+p = ggplot(data = movies, aes(x = CriticRating, y = AudienceRating, 
+                              color = Genre, size = BudgetMillions))
+p= p+ geom_line() + geom_point() #in this order, lines are plotted on top of points, switch to plot points on top of lines
+p
+
+#---------------------------------------------------------------Overriding Aesthetics
+#1. Override the size of plot points
+q = ggplot(data = movies, aes(x=CriticRating,y=AudienceRating,
+                               color = Genre, size = BudgetMillions))
+q= q+geom_point(aes(size = CriticRating)) #override the size of points 
+q
+
+#2. Overide the color of plot points
+q = ggplot(data = movies, aes(x=CriticRating,y=AudienceRating,
+                              color = Genre, size = BudgetMillions))
+q= q+ geom_point(aes(color = BudgetMillions)) #override the color of points
+q
+
+#3. Override an axis
+q = ggplot(data = movies, aes(x=CriticRating,y=AudienceRating,
+                              color = Genre, size = BudgetMillions))
+q= q+ geom_point(aes(x = BudgetMillions)) +    #override the x-axis
+  xlab("Budget Millions $$$")                  #Change the axis label 
+q
+
+#4.Multiple Geometries - adjust parameters of each geometry  
+q = ggplot(data = movies, aes(x = CriticRating, y = AudienceRating, 
+                              color = Genre, size = BudgetMillions ))
+q= q+ geom_point() + geom_line(size = 1) #Change line thickness 
+q
+
+##Playing around with overriding
